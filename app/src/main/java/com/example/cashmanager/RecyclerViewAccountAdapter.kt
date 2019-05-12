@@ -10,23 +10,31 @@ import kotlinx.android.synthetic.main.account.view.*
 class RecyclerViewAccountAdapter(private val context: Context, private val accounts: ArrayList<Account>)
     : RecyclerView.Adapter<RecyclerViewAccountAdapter.ViewHolder>() {
 
-    class ViewHolder (view: View) : RecyclerView.ViewHolder(view) {
+    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
         val title = view.title
         val amount = view.amount
         val icon = view.icon
+
+        init {
+            itemView.setOnClickListener {
+                icon.alpha = 0.5F
+            }
+        }
     }
 
     private fun getAccount(position: Int): Account {
         return accounts[position]
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(context)
-            .inflate(R.layout.account, parent, false))
-    }
-
     override fun getItemCount(): Int {
         return accounts.size
+    }
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return ViewHolder(
+            LayoutInflater.from(context)
+                .inflate(R.layout.account, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
