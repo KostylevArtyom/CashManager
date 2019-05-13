@@ -14,5 +14,11 @@ object SelectedAccounts {
 
     fun setSelected(type: AccountType, position: Int?) {
         selected[type] = position
+        if (type == AccountType.INCOME) {
+            selected[AccountType.EXPENSE] = null
+        }
+        if (type == AccountType.EXPENSE) {
+            selected[AccountType.INCOME] = null
+        }
     }
 }
