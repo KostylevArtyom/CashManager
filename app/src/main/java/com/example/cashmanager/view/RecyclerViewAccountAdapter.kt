@@ -1,29 +1,41 @@
-package com.example.cashmanager
+package com.example.cashmanager.view
 
 import android.content.Context
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.cashmanager.R
+import com.example.cashmanager.SelectedAccounts
+import com.example.cashmanager.model.Account
+import com.example.cashmanager.model.AccountType
 import kotlinx.android.synthetic.main.account.view.*
 
 class RecyclerViewAccountAdapter(private val context: Context, private val accounts: ArrayList<Account>)
     : RecyclerView.Adapter<RecyclerViewAccountAdapter.ViewHolder>() {
 
-    class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
+    inner class ViewHolder(view: View): RecyclerView.ViewHolder(view), View.OnClickListener {
         val title = view.title
         val amount = view.amount
         val icon = view.icon
+        val selectedIcon = view.icon_selected
+
+        override fun onClick(view: View?) {
+            SelectedAccounts.setSelected(getAccountType(), adapterPosition)
+            notifyDataSetChanged()
+        }
 
         init {
-            itemView.setOnClickListener {
-                icon.alpha = 0.5F
-            }
+            view.setOnClickListener(this)
         }
     }
 
     private fun getAccount(position: Int): Account {
         return accounts[position]
+    }
+
+    private fun getAccountType(): AccountType {
+        return accounts[0].type
     }
 
     override fun getItemCount(): Int {
@@ -42,5 +54,8 @@ class RecyclerViewAccountAdapter(private val context: Context, private val accou
         holder.title?.text = account.name
         holder.amount?.text = account.amount.toString()
         holder.icon.setBackgroundResource(account.icon)
+        if (position != SelectedAccounts.getSelected(getAccountType())) {
+            holder.selectedIcon.visibility = View.INVISIBLE
+        }
     }
 }
